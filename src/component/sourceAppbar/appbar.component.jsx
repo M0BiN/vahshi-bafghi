@@ -10,7 +10,7 @@ const Appbar = ({label}) => {
         <Grid item xs={12}>
             <Paper className={classes.paper}>
                 <Typography
-                    style={{ fontFamily: "Lilita One", color: "dark" }}
+                    style={{ fontFamily: "Lilita One", color: "white" }}
                     variant="caption"
                 >
                     {label}
@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
     paper: {
         padding: theme.spacing(1),
         textAlign: "left",
-        background: "#fafafa",
+        background: "#1a237e",
         borderRadius:'0',
       },
 }));
