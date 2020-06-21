@@ -1,10 +1,10 @@
 
 
 
-const ErrorManager = ()=>{
+const ErrorManager = (Message)=>{
 
 
 
 
-    
+
 }

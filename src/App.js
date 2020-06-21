@@ -14,14 +14,23 @@ import Container from "@material-ui/core/Container";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { checkSyntax } from "./functions/SyntaxAnalyzer";
 import {parseTable} from './functions/parseTable';
-function App() {
 
+function App() {
+  
   const classes = useStyles();
   const [input, setInput] = React.useState(initialInput);
+  const [table, setTable] = React.useState([]);
   const [open, setOpen] = React.useState(false);
-  const [error, setError] = React.useState(``);
+  const [error, setError] = React.useState(`..`);
+  const [disable,setDisable] = React.useState(false);
   const handleInputChange = (e) => setInput(e.target.value);
+  
   const handleClose = () => setOpen(false);
+  const errorManager = (msg)=> {
+    setError(msg?msg:'');
+    setOpen(true);
+  }
+  
   
   const Alert = (props) => (
     <MuiAlert elevation={6} variant="filled" {...props} />
@@ -67,13 +76,22 @@ function App() {
                 <Button
                 style={{marginTop:'6px'}}
                 variant="contained"
+                disabled={disable}
                 onClick={()=>{
-                  let ret = getTokens(input);
-
+                  if(!disable){
+                    handleClose();
+                    setDisable(true);
+                    setTimeout(() => setDisable(false), 3000);
+                    setTimeout(() => getTokens(input,errorManager), 0);
+                  }
                   
-                }}
+                  
+                  
+                }
+                
+                }
               >
-                Check
+                Run
               </Button>
               </Container>
               
@@ -81,7 +99,7 @@ function App() {
             <Grid item xs={12} sm={6}>
               <Container>
                 <CssBaseline />
-                <Table data={getTokens(input)} />
+                <Table data={table} />
               </Container>
             </Grid>
           </Grid>
@@ -104,7 +122,7 @@ function App() {
           onClose={handleClose}
           severity={error.length === 0 ? "success" : `error`}
         >
-          {error.length === 0 ? "There is no invalid token" : error}
+          {error.length === 0 ? "Program has been run successfully" : error}
         </Alert>
       </Snackbar>
     </>
@@ -151,14 +169,7 @@ ifn(@age >: 60 )<<
 >>
 finally<<
 say "Not Too Young, Not Too Old"#
->>
-{This is a comment}
-
-until(@temp >: 0)<<
-	say @temp#
-	@temp = @temp- 1#
->>
-`;
+>>`;
 
 
 
@@ -264,3 +275,6 @@ const getType2 = {
 'LOOP':true, 'ON':true,
 'BY':true, 'SAY':true,'GET':true,'FINALLY':true,
 'UNTIL':true, 'COMP1':true,'COMP2':true,'AND':true,'OR':true,'COMMENT':true};
+
+
+

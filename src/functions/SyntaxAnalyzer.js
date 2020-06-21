@@ -1,38 +1,44 @@
 import {parseTable} from './parseTable'
-
-export const checkSyntax = (tokens)=>{
+import { configure } from '@testing-library/react';
+export const checkSyntax = (tokens, errorManager)=>{
   let terStack = ['$','S'];
   while(tokens?.length){
-    console.log(terStack);
     let currentRule = terStack[terStack.length-1];
     let nextToken = getType[tokens[0].group];
     if(isTerminal(currentRule)){
       if(currentRule===nextToken){
-        console.log(terStack.pop() + ' is Out');
-        console.log(tokens.shift() + ' is Out');
+        console.log(terStack.pop() + ' #########################')
+        console.log(tokens[0].value)
+        tokens.shift();
+        
+        
+
       }else{
-        console.log(`Error in line ${tokens[0].row} near token ${nextToken} WE EXPECTED ${currentRule}`);
+        errorManager(`SyntaxError: Unexpected token: \`${tokens[0].value}\` ,Expected \`${currentRule}\` near line: ${tokens[0].line} `);
         break;
       } 
     }else{
       let next = parseTable[currentRule][nextToken];
       if(next){
         if(next[0]==='Lambda'){
-          console.log(terStack.pop() + ' is Out');
+          console.log(terStack.pop())
+          
         }else{
-          terStack.pop();
-          terStack.push(...next)
+          console.log(terStack.pop()+' DDDDDDDDDdown');
+          terStack.push(...next);
+          
           
         }
       }else{
-        console.log(`Error in line ${tokens[0].row} near token ${nextToken} WE EXPECTED ${currentRule}`);
+        errorManager(`SyntaxError: Unexpected token: \`${tokens[0].value}\` near line ${tokens[0].line} `);
         break;
       }
     }
     
   }
   if(!tokens?.length){
-    console.log('MISSION ACCOMPLISHED');
+    //console.log('MISSION ACCOMPLISHED');
+    errorManager(false)
   }
 
 
