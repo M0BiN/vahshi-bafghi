@@ -82,7 +82,7 @@ function App() {
                     handleClose();
                     setDisable(true);
                     setTimeout(() => setDisable(false), 3000);
-                    setTimeout(() => getTokens(input,errorManager), 0);
+                    setTimeout(() => setTable(getTokens(input,errorManager), 0) ?? []);
                   }
                   
                   
