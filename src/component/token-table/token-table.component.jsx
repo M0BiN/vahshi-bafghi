@@ -75,7 +75,7 @@ export default function SimpleTable({ data }) {
 
 
 
-let getType = ['', '',
+export let getType = ['', '',
     'VARIABLE', 'STRING',
     'FLOAT', 'INTEGER','NOT',
     'EQUAL', 'SIGN', 'SIGN', 'MATH_OPERATOR', 'MATH_OPERATOR', 'MATH_OPERATOR', 'POWER',

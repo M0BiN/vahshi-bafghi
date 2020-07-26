@@ -1,4 +1,5 @@
 import {checkSyntax} from './SyntaxAnalyzer';
+import {getType} from '../component/token-table/token-table.component';
 const regex = /(((?:@[a-zA-Z]\w*)\b)|("[^"]*")|(\b\d+\.\d+\b)|(\b\d+\b)|(\!)|(=)|(\+)|(\-)|(\/)|(\*)|(\%)|(\^)|(#)|(\()|(\))|(<<)|(>>)|(as)|(ifn)|(loop)|(on)|(by)|(say)|(get)|(finally)|(until)|((?:::)|(?:\\:))|((?:>:)|(?:<:)|(?:[><]))|(\&)|(\|)|({.*})|(\n)|([^\s]+))/gi;
 
 export const getTokens = (input,  errorManager, tokens = []) => {
@@ -7,13 +8,18 @@ export const getTokens = (input,  errorManager, tokens = []) => {
 
     for (let match = regex.exec(input); match; match = regex.exec(input)){
       if(!isToken(match)){
-        errorManager(`LexicalError: unknown token \`${match[0]}\` near line ${line}`);
+        errorManager({code:1, token:match[0], line});
+        
         return [];
       }
       if(isLine(match))line++;
-      else tokens = addToken(match) ? [...tokens,{value: match[0],row: match.index, line, group: getGroup(match)}] : tokens;
+      else tokens = addToken(match) ? [...tokens,{value: match[0],row: match.index, line, group: getGroup(match), type:getType[getGroup(match)]}] : tokens;
     }
-   checkSyntax(JSON.parse(JSON.stringify(tokens)), errorManager);
+    
+    
+   checkSyntax(JSON.parse(JSON.stringify([...tokens, {value: '$',row: 0, line, group: 0, type:'$'}])), errorManager);
+   //checkSyntax(JSON.parse(JSON.stringify(tokens)), errorManager);
+   //console.log(tokens)
     return tokens;
   };
 

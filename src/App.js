@@ -26,8 +26,13 @@ function App() {
   const handleInputChange = (e) => setInput(e.target.value);
   
   const handleClose = () => setOpen(false);
-  const errorManager = (msg)=> {
-    setError(msg?msg:'');
+  const errorManager = ({code, token, currentRule, line, left, right, operator})=> {
+    setError('');
+    code===1 && setError(`LexicalError: Unknown token '${token}' near line ${line}`);
+    code===2 && setError(`SyntaxError: Expected '${currentRule}' at line: ${token.line}, got '${token.value}' instead `);
+    code===3 && setError(`SyntaxError: Unexpected token: '${token.value}' near line ${token.line} `);
+    //code===4 && setError(`SyntaxError`);
+    code===4 && setError(`TypeError: unsupported operand '${operator.value}\' for : '${left.type}' and '${right.type}' at line ${left.line}`);
     setOpen(true);
   }
   
