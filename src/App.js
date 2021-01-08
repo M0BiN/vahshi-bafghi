@@ -32,7 +32,11 @@ function App() {
     code===2 && setError(`SyntaxError: Expected '${currentRule}' at line: ${token.line}, got '${token.value}' instead `);
     code===3 && setError(`SyntaxError: Unexpected token: '${token.value}' near line ${token.line} `);
     //code===4 && setError(`SyntaxError`);
-    code===4 && setError(`TypeError: unsupported operand '${operator.value}\' for : '${left.type}' and '${right.type}' at line ${left.line}`);
+    code===4 && setError(`TypeError: unsupported operand '${operator?.value}\' for : '${left?.type}' and '${right?.type}' at line ${left?.line}`);
+    code===5 && setError(`TypeError: operator '${operator?.value}' cannot be applied to operand of type '${left?.evaluateType}'`);
+    code===6 && setError(`Error: Division by constant zero at line ${line}`);
+    code===7 && setError(`Outside loop break`);
+
     setOpen(true);
   }
   

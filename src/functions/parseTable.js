@@ -1,6 +1,6 @@
 export const parseTable22 = {
-    S: {VARIABLE:['Statement','S'],CLOSE_STATEMENT:['Lambda'],$:['Lambda'],AS:['Statement','S'],LOOP:['Statement','S'],SAY:['Statement','S'],UNTIL:['Statement','S']},
-    Statement: {VARIABLE:['DeclareVar','DELIMITER'],AS:['AsStatement'],LOOP:['LoopStatement'],SAY:['SayStatement','DELIMITER'],UNTIL:['UntilStatement']},
+    S: {VARIABLE:['Statement','S'],CLOSE_STATEMENT:['Lambda'],$:['Lambda'],AS:['Statement','S'],LOOP:['Statement','S'],SAY:['Statement','S'],UNTIL:['Statement','S'],BREAK:['Statement','S']},
+    Statement: {VARIABLE:['DeclareVar','DELIMITER'],AS:['AsStatement'],LOOP:['LoopStatement'],SAY:['SayStatement','DELIMITER'],UNTIL:['UntilStatement'],BREAK:['BreakStatement','DELIMITER']},
     DeclareVar: {VARIABLE:['VARIABLE','DefineVar'],},
     DefineVar: {EQUAL:['EQUAL','Exp'],DELIMITER:['Lambda'],},
     Exp:   {VARIABLE:['Exp2','Exp3',],STRING:['Exp2','Exp3'],FLOAT:['Exp2','Exp3'],INTEGER:['Exp2','Exp3'],NOT:['Exp2','Exp3'],SIGN:['Exp2','Exp3'],LPAREN:['Exp2','Exp3'],GET:['Exp2','Exp3'],BOOLEAN:['Exp2','Exp3'],},
@@ -21,11 +21,12 @@ export const parseTable22 = {
     Exp16: {VARIABLE:['Literal'],STRING:['Literal'],FLOAT:['Literal'],INTEGER:['Literal'],NOT:['Literal'],SIGN:['Literal'],LPAREN:['LPAREN','Exp','RPAREN'],GET:['Literal'],BOOLEAN:['Literal'],},
     Literal: {VARIABLE:['VARIABLE'],STRING:['STRING'],FLOAT:['FLOAT'],INTEGER:['INTEGER'],GET:['GET'],BOOLEAN:['BOOLEAN']},
     AsStatement: {AS:['AS','LPAREN','Exp','RPAREN','OPEN_STATEMENT','S','CLOSE_STATEMENT','IfnStatement','FinallyStatement']},
-    IfnStatement: {VARIABLE:['Lambda'],CLOSE_STATEMENT:['Lambda'],$:['Lambda'], AS:['Lambda'],IFN:['IFN','LPAREN','Exp','RPAREN','OPEN_STATEMENT','S','CLOSE_STATEMENT','IfnStatement'], LOOP:['Lambda'],SAY:['Lambda'],UNTIL:['Lambda'],FINALLY:['Lambda']},
-    FinallyStatement: {VARIABLE:['Lambda'],CLOSE_STATEMENT:['Lambda'],$:['Lambda'], FINALLY:['FINALLY','OPEN_STATEMENT','S','CLOSE_STATEMENT'], LOOP:['Lambda'],SAY:['Lambda'],UNTIL:['Lambda']},
+    IfnStatement: {VARIABLE:['Lambda'],CLOSE_STATEMENT:['Lambda'],$:['Lambda'], AS:['Lambda'],IFN:['IFN','LPAREN','Exp','RPAREN','OPEN_STATEMENT','S','CLOSE_STATEMENT','IfnStatement'],BREAK:['Lambda'], LOOP:['Lambda'],SAY:['Lambda'],UNTIL:['Lambda'],FINALLY:['Lambda']},
+    FinallyStatement: {VARIABLE:['Lambda'],CLOSE_STATEMENT:['Lambda'],$:['Lambda'], FINALLY:['FINALLY','OPEN_STATEMENT','S','CLOSE_STATEMENT'], LOOP:['Lambda'],SAY:['Lambda'],UNTIL:['Lambda'],BREAK:['Lambda']},
     LoopStatement: {LOOP:['LOOP','Exp','ON','VARIABLE','BY','StepSign','INTEGER','OPEN_STATEMENT','S','CLOSE_STATEMENT']},
-    StepSign: {SIGN:['SIGN'],MATH_OPERATOR:['MATH_OPERATOR'],SAY:['SAY','Exp']},
+    StepSign: {SIGN:['SIGN'],MATH_OPERATOR:['MATH_OPERATOR']},
     SayStatement: {SAY:['SAY','Exp']},
+    BreakStatement: {BREAK:['BREAK']},
     UntilStatement: {UNTIL:['UNTIL','LPAREN','Exp','RPAREN','OPEN_STATEMENT','S','CLOSE_STATEMENT']},
   };
   

@@ -54,7 +54,7 @@ const getType2 = {
 'CLOSE_STATEMENT':true,
 'AS':true, 'IFN':true,
 'LOOP':true, 'ON':true,
-'BY':true, 'SAY':true,'GET':true,'FINALLY':true,
+'BY':true, 'SAY':true,'BREAK':true,'GET':true,'FINALLY':true,
 'UNTIL':true, 'COMP1':true,'COMP2':true,'AND':true,'OR':true,'COMMENT':true,'$':true};
 
 
@@ -85,7 +85,7 @@ const getNode = (rule)=>({
         if(!declareVarNode.Identifier && v?.type==='VARIABLE'){
           declareVarNode = {...declareVarNode, Identifier:v}
         }else
-        if(!declareVarNode.init && (v?.type==='VARIABLE' || v?.type==='Literal' || v?.type==='Exp' || isLiteral(v))){
+        if(!declareVarNode.init && (v?.type==='VARIABLE' || v?.type==='Literal' || v?.type==='Exp' || isLiteral(v) || v?.type==='UnaryExpression')){
           declareVarNode = {...declareVarNode, init:v}
         }
       })
@@ -115,13 +115,13 @@ const getNode = (rule)=>({
       }
       if(array.length === 1)return array[0];
       array.forEach(v=>{
-        if(!expNode.leftChild && (v?.type==='VARIABLE' || v?.type==='Exp' ||v?.type==='Literal' || isLiteral(v))){
+        if(!expNode.leftChild && (v?.type==='VARIABLE' || v?.type==='Exp' ||v?.type==='Literal' || isLiteral(v) || v?.type==='UnaryExpression')){
           expNode = {...expNode, leftChild:v}
         }else
         if(!expNode.operator && (isOperator(v) || v?.type==='HalfExp')){
           expNode = {...expNode, operator:v}
       }else
-        if(!expNode.rightChild && (v?.type==='VARIABLE' || v?.type==='Exp'|| v?.type==='HalfExp'  ||v?.type==='Literal' || isLiteral(v))){
+        if(!expNode.rightChild && (v?.type==='VARIABLE' || v?.type==='Exp'|| v?.type==='HalfExp'  ||v?.type==='Literal' || isLiteral(v) || v?.type==='UnaryExpression')){
           expNode = {...expNode, rightChild:v}
       }
     })
@@ -156,15 +156,10 @@ const getNode = (rule)=>({
     Exp12:  (array)=>getNode('Exp')(array),
     Exp13:  (array)=>getNode('Exp3')(array),
     Exp14:  (array)=>{
+      //console.log(array)
       if(array.length===1)return array[0];
-      let expNode = {type:'UnaryExpression'};
-      array.forEach(v=>{
-        if(v.type==='SIGN' || v.type==='NOT'){
-          expNode['operator'] = v;
-        }else expNode['argument'] = v;
-        
-      })
-      return expNode;
+      return {type:'UnaryExpression', operator:array[0], init:array[1]};
+      
     },
     Exp15:   (array)=>getNode('Exp3')(array),
     Exp16:   (array)=> {
@@ -235,6 +230,7 @@ const getNode = (rule)=>({
     LoopStatement:  (array)=>({type:'LoopStatement',Identifier:array[3],init:array[1],stepSign:array[5],by:array[6], body:[...array.slice(8,-1).filter(v=>v?.type!=='Lambda')]}),
     StepSign:  (array)=>array[0],
     SayStatement:  (array)=> ({type:'SayStatement', init:array[1]}),
+    BreakStatement:  (array)=> ({type:'BreakStatement'}),
     UntilStatement:  (array)=>({type:'UntileStatement',condition:array[2], body:[...array.slice(5,-1).filter(v=>v?.type!=='Lambda')]}),
 }
   
@@ -247,7 +243,7 @@ const isLiteral = (v)=>{
   return v?.type==='STRING' || v?.type==='FLOAT'|| v?.type==='INTEGER'
 }
 const isOperator = (v)=>{
-  return v?.type==='MATH_OPERATOR' || v?.type==='SIGN' ||v?.type==='COMP1' ||v?.type==='COMP2' || v?.type==='AND' || v?.type==='OR'
+  return v?.type==='MATH_OPERATOR' || v?.type==='SIGN' ||v?.type==='COMP1' ||v?.type==='COMP2' || v?.type==='AND' || v?.type==='OR' || v?.type==='POWER'
 }
 
 

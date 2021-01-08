@@ -85,7 +85,7 @@ export let getType = ['', '',
     'CLOSE_STATEMENT',
     'AS', 'IFN',
     'LOOP', 'ON',
-    'BY', 'SAY','GET','FINALLY',
+    'BY', 'SAY','BREAK','GET','FINALLY',
     'UNTIL', 'COMP1','COMP2','AND','OR','COMMENT'];
 
 
